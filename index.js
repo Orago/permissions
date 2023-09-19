@@ -1,4 +1,4 @@
-module.exports = exports.PermissionManager = class PermissionManager {
+class PermissionManager {
 	permissions;
 
 	constructor (...permissions){
@@ -10,7 +10,6 @@ module.exports = exports.PermissionManager = class PermissionManager {
 	granted (value, permissions){
 		for (const permission of permissions)
 			if (this.permissions.hasOwnProperty(permission))
-				
 				value |= this.permissions[permission];
 
 		return value;
@@ -25,15 +24,16 @@ module.exports = exports.PermissionManager = class PermissionManager {
 	}
 
 	has (value, permissions){
-		const p = this.permissions
+		const p = this.permissions;
+
 		if (typeof permissions === 'string' && p.hasOwnProperty(permissions))
 			return (value & p[permissions]) === p[permissions];
 
 		else if (Array.isArray(permissions)){
-			permissions.every(
+			return permissions.every(
 				permission =>
 					p.hasOwnProperty(permission) && 
-					((value & p[permissions]) === p[permissions])
+					((value & p[permission]) === p[permission])
 			);
 		}
 
@@ -44,12 +44,8 @@ module.exports = exports.PermissionManager = class PermissionManager {
 		return this.granted(0, permissions);
 	}
 
-	get data (){
-		return this.permissions;
-	}
-
-	get valueOf (){
-
+	valueOf (permission){
+		return this.permissions.hasOwnProperty(permission) ? this.permissions[permission] : 0;
 	}
 
 	new (...permissions){
@@ -57,7 +53,9 @@ module.exports = exports.PermissionManager = class PermissionManager {
 	}
 }
 
-exports.PermissionChecker = class PermissionChecker {
+module.exports = exports.PermissionManager = PermissionManager
+
+class PermissionChecker {
 	manager;
 	value = 0;
 
@@ -68,21 +66,23 @@ exports.PermissionChecker = class PermissionChecker {
 		this.manager = manager;
 
 		if (Array.isArray(permissions)){
-			this.grant(permissions);
+			this.grant(...permissions);
 		}
 		else if (typeof permissions === 'number')
 			this.value = permissions;
 	}
 
-	grant (permissions){
+	grant (...permissions){
 		return this.value = this.manager.granted(this.value, permissions);
 	}
 
-	revoke (permissions){
+	revoke (...permissions){
 		return this.value = this.manager.revoked(this.value, permissions);
 	}
 
-	has (permission){
-		return this.manager.has(this.value, permission)
+	has (...permissions){
+		return this.manager.has(this.value, permissions)
 	}
 }
+
+exports.PermissionChecker = PermissionChecker;
