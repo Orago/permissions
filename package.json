@@ -1,0 +1,19 @@
+{
+  "name": "@orago/permissions",
+  "version": "1.0.0",
+  "description": "Basic Permission utility",
+  "main": "index.js",
+  "scripts": {
+		"start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+	"repository": {
+    "type": "git",
+    "url": "https://github.com/orago/status-responses.git"
+  },
+  "keywords": [
+    "permissions"
+  ],
+  "author": "Orago",
+  "license": "ISC"
+}
