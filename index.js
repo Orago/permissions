@@ -23,21 +23,29 @@ class PermissionManager {
 		return value;
 	}
 
-	has (value, permissions){
+	asArray (permissions){
 		const p = this.permissions;
 
-		if (typeof permissions === 'string' && p.hasOwnProperty(permissions))
-			return (value & p[permissions]) === p[permissions];
+		if (Array.isArray(permissions))
+			return permissions;
 
-		else if (Array.isArray(permissions)){
-			return permissions.every(
-				permission =>
-					p.hasOwnProperty(permission) && 
-					((value & p[permission]) === p[permission])
-			);
-		}
+		else if (typeof permissions === 'string')
+			return [permissions];
 
-		return false;
+		return [];
+	}
+
+	hasOne (value, permission){
+		const p = this.permissions;
+		return p.hasOwnProperty(permission) && ((value & p[permission]) === p[permission]);
+	}
+
+	hasMany (value, permissions){
+		return this.asArray(permissions).every(permission => this.hasOne(value, permission));
+	}
+
+	hasSome (value, permissions){
+		return this.asArray(permissions).some(permission => this.hasOne(value, permission));
 	}
 
 	generate (...permissions){
