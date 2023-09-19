@@ -24,9 +24,18 @@ module.exports = exports.PermissionManager = class PermissionManager {
 		return value;
 	}
 
-	has (value, permission){
-		if (this.permissions.hasOwnProperty(permission))
-			return (value & this.permissions[permission]) === this.permissions[permission];
+	has (value, permissions){
+		const p = this.permissions
+		if (typeof permissions === 'string' && p.hasOwnProperty(permissions))
+			return (value & p[permissions]) === p[permissions];
+
+		else if (Array.isArray(permissions)){
+			permissions.every(
+				permission =>
+					p.hasOwnProperty(permission) && 
+					((value & p[permissions]) === p[permissions])
+			);
+		}
 
 		return false;
 	}
@@ -37,6 +46,10 @@ module.exports = exports.PermissionManager = class PermissionManager {
 
 	get data (){
 		return this.permissions;
+	}
+
+	get valueOf (){
+
 	}
 
 	new (...permissions){
