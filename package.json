@@ -1,6 +1,6 @@
 {
   "name": "@orago/permissions",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Basic Permission utility",
   "main": "index.js",
   "scripts": {

@@ -3,7 +3,7 @@ class PermissionManager {
 
 	constructor (...permissions){
 		this.permissions = Object.fromEntries(
-      [...new Set(permissions)].map((value, index) => [value, index + 1])
+      [...new Set(permissions)].map((value, index) => [value, Math.pow(2, index)])
     );
 	}
 
@@ -89,7 +89,7 @@ class PermissionChecker {
 	}
 
 	has (...permissions){
-		return this.manager.has(this.value, permissions)
+		return this.manager.hasOne(this.value, permissions)
 	}
 }
 
